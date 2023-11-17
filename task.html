@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasks</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="content2">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/index.html">ToDoApp</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/task.html">Tasks</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <h1 class="topHeading">Your Tasks here</h1>
+    <div class="cards">
+
+    </div>
+    <div class="container">
+      <input required="" type="text" name="text" class="input">
+      <label class="label">Type Your tasks here...</label>
+      <button onclick="addTask()" type="submit"><i class="fa fa-plus"></i></button>
+    </div>
+  </div>
+
+  <script>
+    let tasks = [
+      // { id: 1, data: 'this is a task 1' },
+      // { id: 2, data: 'this is a task 2' },
+      // { id: 3, data: 'this is a task 3' },
+    ]
+
+    const text = document.querySelector('.cards');
+    let newInput = document.querySelector('.input');
+    function renderTasks() {
+      const tasklist = tasks.map((task) => {
+        return `<div class="card" id="task${task.id}">
+            <div id="textoftask">${task.id}---> ${task.data}</div>
+            <button class="iconCross" onclick='deleteTask(${task.id})'><i class="fa fa-close"></i></button>
+         </div>`
+      }).join('');
+      text.innerHTML = tasklist;
+      console.log(tasks.length);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(task => task.id !== id);
+      renderTasks();
+    }
+    function addTask(){
+      // e.preventDefault();
+      if(newInput.value.trim()!==''){
+        let textInput = newInput.value.trim();
+        const newId = tasks.length+1;
+        
+        tasks.push({id: newId, data: textInput});
+        newInput.value ='';
+        renderTasks();
+      }
+    }
+    function loadTasksFromLocalStorage() {
+      const tasksList = JSON.parse(localStorage.getItem('tasks')); 
+      if(tasksList){
+        tasks = tasksList;
+        renderTasks();
+      }
+    }
+    loadTasksFromLocalStorage();
+    // renderTasks();
+    gsap.from('.content2',{
+      duration: 2,
+      yPercent: 200,
+      ease: Power1.InOut
+    })
+    gsap.from('.navbar-brand',  {
+    // y:200,
+    opacity: 0,
+    delay:2,
+    x:-20,
+    ease: Power3.easeInOut,
+    duration:1
+});
+gsap.from('.nav-link',  {
+    opacity: 0,
+    delay:2,
+    // y:200,
+    x:20,
+    ease: Power3.easeInOut,
+    duration:1
+});
+
+  </script>
+</body>
+
+</html>
